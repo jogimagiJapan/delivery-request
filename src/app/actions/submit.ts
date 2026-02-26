@@ -30,11 +30,21 @@ export async function submitDeliveryForm(
     }
 
     try {
+        console.log("=== GAS送信開始 ===");
+        console.log("Endpoint (Starts with):", GAS_ENDPOINT.substring(0, 30) + "...");
+
         const res = await fetch(GAS_ENDPOINT, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            },
             body: JSON.stringify(payload),
+            cache: "no-store",
+            redirect: "follow",
         });
+
+        console.log("=== GASレスポンス受信 ===", res.status);
 
         if (!res.ok) {
             throw new Error(`HTTP error: ${res.status}`);

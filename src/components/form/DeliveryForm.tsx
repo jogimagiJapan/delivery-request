@@ -87,15 +87,21 @@ export default function DeliveryForm() {
             submittedAt: new Date().toISOString(),
         };
 
-        const result = await submitDeliveryForm(payload);
+        try {
+            const result = await submitDeliveryForm(payload);
 
-        if (result.success) {
-            router.push(`/complete?key=${authKey}`);
-        } else if (result.isDebugMode) {
-            setSubmitStatus("debug");
-        } else {
+            if (result.success) {
+                router.push(`/complete?key=${authKey}`);
+            } else if (result.isDebugMode) {
+                setSubmitStatus("debug");
+            } else {
+                setSubmitStatus("error");
+                setErrorMessage(result.error);
+            }
+        } catch (err) {
+            console.error("Submission error:", err);
             setSubmitStatus("error");
-            setErrorMessage(result.error);
+            setErrorMessage(err instanceof Error ? err.message : "サーバー通信中にエラーが発生しました。");
         }
     };
 
