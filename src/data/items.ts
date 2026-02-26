@@ -6,17 +6,17 @@ export type ItemConfig = {
 
 export const ITEM_MAP: Record<string, ItemConfig> = {
     "ロンT": {
-        sizes: ["S", "M", "L", "XL"],
-        colors: ["白", "グレー"],
+        sizes: ["M", "L", "XL", "その他"],
+        colors: ["白", "グレー", "その他"],
         hasColor: true,
     },
     "Tシャツ": {
-        sizes: ["S", "M", "L", "XL"],
-        colors: ["白", "黒"],
+        sizes: ["S", "M", "L", "XL", "その他"],
+        colors: ["白", "黒", "その他"],
         hasColor: true,
     },
     "キッズT": {
-        sizes: ["110", "130"],
+        sizes: ["110", "130", "その他"],
         colors: ["ナチュラル", "白", "ブルー", "イエロー"],
         hasColor: true,
     },

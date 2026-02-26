@@ -53,10 +53,18 @@ export default function DeliveryForm() {
     const [submitStatus, setSubmitStatus] = useState<SubmitStatus>("idle");
     const [errorMessage, setErrorMessage] = useState<string>("");
 
+    const today = new Date();
+    const todayStr =
+        today.getFullYear() +
+        String(today.getMonth() + 1).padStart(2, "0") +
+        String(today.getDate()).padStart(2, "0");
+
     const methods = useForm<DeliveryFormSchema>({
         resolver: zodResolver(deliveryFormSchema),
         defaultValues: {
-            userId: "",
+            userDate: todayStr,
+            userTime: "",
+            userName: "",
             recipientName: "",
             recipientKana: "",
             phone: "",
@@ -82,8 +90,11 @@ export default function DeliveryForm() {
         setSubmitStatus("loading");
         setErrorMessage("");
 
+        const { userDate, userTime, userName, ...restData } = data;
+
         const payload = {
-            ...data,
+            ...restData,
+            userId: `${userDate}_${userTime}_${userName}`,
             submittedAt: new Date().toISOString(),
         };
 
@@ -112,21 +123,48 @@ export default function DeliveryForm() {
             <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-2">
                 {/* ── 識別情報 ── */}
                 <Section title="Identification">
-                    <div>
-                        <Label
-                            htmlFor="userId"
-                            required
-                            sub="例: 20260226_145235_tanaka"
-                        >
-                            ユーザーID
-                        </Label>
-                        <Input
-                            id="userId"
-                            type="text"
-                            placeholder="20260226_145235_username"
-                            error={errors.userId?.message}
-                            {...register("userId")}
-                        />
+                    <div className="space-y-4">
+                        <div>
+                            <Label
+                                htmlFor="userDate"
+                                required
+                            >
+                                Date (8桁)
+                            </Label>
+                            <Input
+                                id="userDate"
+                                type="text"
+                                placeholder="20260226"
+                                maxLength={8}
+                                error={errors.userDate?.message}
+                                {...register("userDate")}
+                            />
+                        </div>
+                        <div>
+                            <Label htmlFor="userTime" required>
+                                Time (6桁)
+                            </Label>
+                            <Input
+                                id="userTime"
+                                type="text"
+                                placeholder="145235"
+                                maxLength={6}
+                                error={errors.userTime?.message}
+                                {...register("userTime")}
+                            />
+                        </div>
+                        <div>
+                            <Label htmlFor="userName" required sub="※英数のみ">
+                                Username (英数)
+                            </Label>
+                            <Input
+                                id="userName"
+                                type="text"
+                                placeholder="tanaka"
+                                error={errors.userName?.message}
+                                {...register("userName")}
+                            />
+                        </div>
                     </div>
                 </Section>
 
@@ -135,12 +173,12 @@ export default function DeliveryForm() {
                     <div className="space-y-4">
                         <div>
                             <Label htmlFor="recipientName" required>
-                                受取人氏名
+                                氏名
                             </Label>
                             <Input
                                 id="recipientName"
                                 type="text"
-                                placeholder="山田 太郎"
+                                placeholder="与儀 マギー"
                                 error={errors.recipientName?.message}
                                 {...register("recipientName")}
                             />
@@ -158,7 +196,7 @@ export default function DeliveryForm() {
                             <Input
                                 id="recipientKana"
                                 type="text"
-                                placeholder="やまだ たろう"
+                                placeholder="よぎ まぎー"
                                 error={errors.recipientKana?.message}
                                 {...register("recipientKana")}
                             />

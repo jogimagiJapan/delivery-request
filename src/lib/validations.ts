@@ -3,17 +3,13 @@ import { ITEM_MAP, ITEM_NAMES } from "@/data/items";
 
 export const deliveryFormSchema = z
     .object({
-        // ユーザーID: 日付8桁_時刻6桁_英数ユーザー名
-        userId: z
-            .string()
-            .min(1, "ユーザーIDを入力してください")
-            .regex(
-                /^\d{8}_\d{6}_[a-zA-Z0-9]+$/,
-                "形式: YYYYMMDD_HHMMSS_username（英数のみ）例: 20260226_145235_tanaka"
-            ),
+        // ユーザーID: 3つに分割して個別にバリデーション
+        userDate: z.string().regex(/^\d{8}$/, "8桁の数字（入力必須）"),
+        userTime: z.string().regex(/^\d{6}$/, "6桁の数字（入力必須）"),
+        userName: z.string().regex(/^[a-zA-Z0-9]+$/, "英数のみ（入力必須）"),
 
-        // 受取人（バリデーションはフォーマット不問・任意）
-        recipientName: z.string().min(1, "受取人氏名を入力してください"),
+        // 氏名（バリデーションはフォーマット不問・任意）
+        recipientName: z.string().min(1, "氏名を入力してください"),
 
         recipientKana: z.string().optional(),
 

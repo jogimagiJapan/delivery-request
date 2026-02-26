@@ -75,7 +75,7 @@ export function AddressSection() {
                 <Label
                     htmlFor="postalCode"
                     required
-                    sub="7桁（ハイフンなし）を入力すると住所が自動補完されます"
+                    sub="7桁（ハイフンなし）を入力すると住所が自動入力されます"
                 >
                     郵便番号
                 </Label>
@@ -84,7 +84,7 @@ export function AddressSection() {
                         id="postalCode"
                         type="tel"
                         inputMode="numeric"
-                        placeholder="1500001"
+                        placeholder="5308201"
                         maxLength={7}
                         error={errors.postalCode?.message}
                         value={postalCode ?? ""}
@@ -108,7 +108,7 @@ export function AddressSection() {
                 <Input
                     id="prefecture"
                     type="text"
-                    placeholder="東京都（自動補完）"
+                    placeholder="大阪府（自動入力）"
                     error={errors.prefecture?.message}
                     {...register("prefecture")}
                 />
@@ -116,13 +116,13 @@ export function AddressSection() {
 
             {/* 市区町村・番地 */}
             <div>
-                <Label htmlFor="cityAddress" required>
+                <Label htmlFor="cityAddress" required sub="※番地等を最後まで確実に入力してください">
                     市区町村・番地
                 </Label>
                 <Input
                     id="cityAddress"
                     type="text"
-                    placeholder="渋谷区神南1-2-3"
+                    placeholder="大阪市北区中之島1-3-20"
                     error={errors.cityAddress?.message}
                     {...register("cityAddress")}
                 />

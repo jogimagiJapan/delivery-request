@@ -79,7 +79,7 @@ export function ItemSelector() {
                             minHeight: "52px",
                         }}
                     >
-                        {itemConfig.sizes[0]} (固定)
+                        {itemConfig.sizes[0]}
                         {/* フォーム送信用にhiddenをもたせる */}
                         <input type="hidden" value={itemConfig.sizes[0]} {...register("itemSize")} />
                     </div>

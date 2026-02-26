@@ -1,5 +1,7 @@
 export type FormValues = {
-    userId: string;
+    userDate: string;
+    userTime: string;
+    userName: string;
     recipientName: string;
     recipientKana?: string;       // ふりがな（任意）
     phone: string;            // 電話番号（ハイフンなし10〜11桁）
@@ -13,6 +15,7 @@ export type FormValues = {
     notes?: string;           // 備考
 };
 
-export type SubmitPayload = FormValues & {
+export type SubmitPayload = Omit<FormValues, "userDate" | "userTime" | "userName"> & {
+    userId: string;           // GAS送信用に結合されたID
     submittedAt: string;      // ISO8601 送信日時
 };
