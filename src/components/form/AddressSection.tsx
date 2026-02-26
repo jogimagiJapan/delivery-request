@@ -39,6 +39,7 @@ export function AddressSection() {
         register,
         setValue,
         watch,
+        setFocus,
         formState: { errors },
     } = useFormContext<DeliveryFormSchema>();
 
@@ -62,6 +63,11 @@ export function AddressSection() {
                 setValue("prefecture", address.region, { shouldValidate: true });
                 const city = [address.locality, address.street].filter(Boolean).join("");
                 setValue("cityAddress", city, { shouldValidate: true });
+
+                // 住所補完後、すぐに続きを入力できるようフォーカスを当てる
+                setTimeout(() => {
+                    setFocus("cityAddress");
+                }, 100);
             } else {
                 setLookupError("住所が見つかりませんでした。手入力してください。");
             }
@@ -116,9 +122,15 @@ export function AddressSection() {
 
             {/* 市区町村・番地 */}
             <div>
-                <Label htmlFor="cityAddress" required sub="※番地等を最後まで確実に入力してください">
+                <Label htmlFor="cityAddress" required>
                     市区町村・番地
                 </Label>
+                <div className="mb-2 mt-1 px-3 py-2.5 bg-red-50 border border-red-200 rounded-lg shadow-sm">
+                    <p className="text-red-700 font-bold text-sm flex items-center gap-1.5">
+                        <span className="text-lg leading-none">⚠</span>
+                        ※番地等を最後まで確実に入力してください。
+                    </p>
+                </div>
                 <Input
                     id="cityAddress"
                     type="text"
