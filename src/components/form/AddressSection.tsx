@@ -14,15 +14,21 @@ type YubinbangoAddress = {
 
 async function fetchAddress(zip: string): Promise<YubinbangoAddress | null> {
     try {
-        // yubinbango JSONP APIをJSONとして呼び出す
-        const url = `https://yubinbango.github.io/yubinbango/p/${zip}.js`;
+        const url = `https://zipcloud.ibsnet.co.jp/api/search?zipcode=${zip}`;
         const res = await fetch(url);
         if (!res.ok) return null;
-        const text = await res.text();
-        // JSONP形式: $yubin({"region":"東京都",...})
-        const match = text.match(/\$yubin\((\{.+\})\)/);
-        if (!match) return null;
-        return JSON.parse(match[1]) as YubinbangoAddress;
+        const data = await res.json();
+
+        if (data.status !== 200 || !data.results || data.results.length === 0) {
+            return null;
+        }
+
+        const result = data.results[0];
+        return {
+            region: result.address1, // 都道府県
+            locality: result.address2, // 市区町村
+            street: result.address3, // 町域
+        };
     } catch {
         return null;
     }

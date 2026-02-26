@@ -2,10 +2,6 @@
 
 import { SubmitPayload } from "@/types/form";
 
-const GAS_ENDPOINT = process.env.NEXT_PUBLIC_GAS_ENDPOINT ?? "";
-const IS_PLACEHOLDER =
-    !GAS_ENDPOINT || GAS_ENDPOINT.includes("YOUR_SCRIPT_ID");
-
 export type SubmitResult =
     | { success: true }
     | { success: false; error: string; isDebugMode?: boolean };
@@ -13,6 +9,8 @@ export type SubmitResult =
 export async function submitDeliveryForm(
     payload: SubmitPayload
 ): Promise<SubmitResult> {
+    const GAS_ENDPOINT = process.env.NEXT_PUBLIC_GAS_ENDPOINT ?? "";
+    const IS_PLACEHOLDER = !GAS_ENDPOINT || GAS_ENDPOINT.includes("YOUR_SCRIPT_ID");
     // GAS URL 未設定時のデバッグモード
     if (IS_PLACEHOLDER) {
         console.log(
