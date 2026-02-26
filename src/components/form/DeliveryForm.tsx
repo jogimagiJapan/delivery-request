@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useLayoutEffect } from "react";
+import { useState, useEffect } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
@@ -54,7 +54,8 @@ export default function DeliveryForm() {
     const [authKey] = useState(() => searchParams.get("key") ?? "");
 
     // URLのクリーンアップ: 認証キーを取得できた直後、アドレスバーから?key=...を消去する
-    useLayoutEffect(() => {
+    // Next.jsのServer ActionはURL変更と連動するため、history.replaceStateではなくrouterを利用します
+    useEffect(() => {
         if (typeof window !== "undefined" && searchParams.has("key")) {
             const newParams = new URLSearchParams(searchParams.toString());
             newParams.delete("key");
@@ -63,9 +64,9 @@ export default function DeliveryForm() {
                 ? `${pathname}?${newParams.toString()}`
                 : pathname;
 
-            window.history.replaceState(null, "", newUrl);
+            router.replace(newUrl, { scroll: false });
         }
-    }, [pathname, searchParams]);
+    }, [pathname, searchParams, router]);
 
     const [submitStatus, setSubmitStatus] = useState<SubmitStatus>("idle");
     const [errorMessage, setErrorMessage] = useState<string>("");
