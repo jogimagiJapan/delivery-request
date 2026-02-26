@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/Input";
 import { Button } from "@/components/ui/Button";
 import { ItemSelector } from "@/components/form/ItemSelector";
 import { AddressSection } from "@/components/form/AddressSection";
+import { UserIdInput } from "@/components/form/UserIdInput";
 
 type SubmitStatus = "idle" | "loading" | "debug" | "error";
 
@@ -123,48 +124,7 @@ export default function DeliveryForm() {
             <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-2">
                 {/* ── 識別情報 ── */}
                 <Section title="Identification">
-                    <div>
-                        <Label
-                            htmlFor="userDate"
-                            required
-                            sub="例：[20260226] _ [145235] _ [username]"
-                        >
-                            ユーザーID
-                        </Label>
-                        <div className="flex items-start gap-1.5 mt-2">
-                            <div className="flex-[1.2]">
-                                <Input
-                                    id="userDate"
-                                    type="text"
-                                    placeholder="YYYYMMDD"
-                                    maxLength={8}
-                                    error={errors.userDate?.message}
-                                    {...register("userDate")}
-                                />
-                            </div>
-                            <span className="text-gray-400 font-bold shrink-0 mt-3.5">_</span>
-                            <div className="flex-1">
-                                <Input
-                                    id="userTime"
-                                    type="text"
-                                    placeholder="HHMMSS"
-                                    maxLength={6}
-                                    error={errors.userTime?.message}
-                                    {...register("userTime")}
-                                />
-                            </div>
-                            <span className="text-gray-400 font-bold shrink-0 mt-3.5">_</span>
-                            <div className="flex-[1.5]">
-                                <Input
-                                    id="userName"
-                                    type="text"
-                                    placeholder="名前（英数）"
-                                    error={errors.userName?.message}
-                                    {...register("userName")}
-                                />
-                            </div>
-                        </div>
-                    </div>
+                    <UserIdInput />
                 </Section>
 
                 {/* ── 受取人情報 ── */}
