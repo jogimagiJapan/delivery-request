@@ -9,7 +9,10 @@ export type SubmitResult =
 export async function submitDeliveryForm(
     payload: SubmitPayload
 ): Promise<SubmitResult> {
-    const GAS_ENDPOINT = process.env.NEXT_PUBLIC_GAS_ENDPOINT ?? "";
+    // Vercel本番環境でのServer Actions内ではNEXT_PUBLIC_付き変数が
+    // ビルド時にインライン置換されるかランタイムでundefになる挙動の違いがあるため、
+    // ここで確実に読み込めるようにします。
+    const GAS_ENDPOINT = process.env.NEXT_PUBLIC_GAS_ENDPOINT || "";
     const IS_PLACEHOLDER = !GAS_ENDPOINT || GAS_ENDPOINT.includes("YOUR_SCRIPT_ID");
     // GAS URL 未設定時のデバッグモード
     if (IS_PLACEHOLDER) {
