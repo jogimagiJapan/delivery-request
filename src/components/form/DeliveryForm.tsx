@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useLayoutEffect } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { deliveryFormSchema, DeliveryFormSchema } from "@/lib/validations";
 import { submitDeliveryForm } from "@/app/actions/submit";
 import { Label } from "@/components/ui/Label";
@@ -48,8 +48,24 @@ const Section = ({
 
 export default function DeliveryForm() {
     const router = useRouter();
+    const pathname = usePathname();
     const searchParams = useSearchParams();
-    const authKey = searchParams.get("key") ?? "";
+    // URLのパラメータから取得し、stateに保持する（リロード時に消えていても保持するため初期化時のみ取得できればOK）
+    const [authKey] = useState(() => searchParams.get("key") ?? "");
+
+    // URLのクリーンアップ: 認証キーを取得できた直後、アドレスバーから?key=...を消去する
+    useLayoutEffect(() => {
+        if (typeof window !== "undefined" && searchParams.has("key")) {
+            const newParams = new URLSearchParams(searchParams.toString());
+            newParams.delete("key");
+
+            const newUrl = newParams.toString()
+                ? `${pathname}?${newParams.toString()}`
+                : pathname;
+
+            window.history.replaceState(null, "", newUrl);
+        }
+    }, [pathname, searchParams]);
 
     const [submitStatus, setSubmitStatus] = useState<SubmitStatus>("idle");
     const [errorMessage, setErrorMessage] = useState<string>("");

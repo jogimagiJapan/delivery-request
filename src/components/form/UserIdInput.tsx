@@ -63,7 +63,10 @@ export function UserIdInput() {
                         onChange: (e) => {
                             // 6文字入力されたら自動で次の入力欄へ
                             if (e.target.value.length === 6 && nameRef.current) {
-                                nameRef.current.focus();
+                                // 少し遅延させることで、現在入力した文字が次のInputに拾われるのを防ぐ
+                                setTimeout(() => {
+                                    nameRef.current?.focus();
+                                }, 10);
                             }
                         }
                     })}
@@ -78,7 +81,7 @@ export function UserIdInput() {
                 {/* Username (残りの幅をすべて使う) */}
                 <input
                     type="text"
-                    placeholder="名前（英数）"
+                    placeholder="英数字"
                     className="border-none outline-none bg-transparent text-sm flex-1 px-1"
                     style={{ color: "var(--color-text-main)", fontFamily: "var(--font-main)" }}
                     {...register("userName")}
